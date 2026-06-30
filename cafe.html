@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ember & Ground — Where Every Cup Tells a Story</title>
+  <meta name="description" content="Ember & Ground is a warm, editorial luxury café in the heart of the city. Reserve a table, explore our menu, and experience coffee as craft." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & TOKENS ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --espresso:   #1A0F08;
+      --espresso2:  #120A04;
+      --parchment:  #E8D9C0;
+      --parchment2: #D4C4A8;
+      --gold:       #C9852A;
+      --gold-light: #E8A84A;
+      --gold-dim:   #8B5A1A;
+      --cream:      #F5ECD8;
+      --muted:      #9A8470;
+      --card-bg:    #231508;
+      --card-border:#3A2010;
+      --nav-h:      72px;
+      --radius:     4px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--espresso);
+      color: var(--parchment);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ─── SCROLLBAR ───────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--espresso2); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    /* ─── SCROLL ANIMATION ────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── TYPOGRAPHY HELPERS ──────────────────────────────────────── */
+    h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; line-height: 1.2; }
+
+    .section-label {
+      font-family: 'Lora', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .gold { color: var(--gold); }
+
+    /* ─── LAYOUT ──────────────────────────────────────────────────── */
+    .container {
+      max-width: 1140px;
+      margin-inline: auto;
+      padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+    }
+
+    section { padding-block: clamp(5rem, 10vw, 8rem); }
+
+    /* ─── GRAIN TEXTURE (SVG noise) ───────────────────────────────── */
+    .grain::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════════════════════ */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 1000;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(18, 10, 4, 0.82);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      box-shadow: 0 1px 0 rgba(201,133,42,0.15);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--nav-h);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.25rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: 'Lora', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment2);
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      border: 1px solid var(--gold-dim);
+      padding: 0.45rem 1.1rem;
+      border-radius: var(--radius);
+      color: var(--gold) !important;
+      transition: background var(--transition), border-color var(--transition) !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover {
+      background: rgba(201,133,42,0.12) !important;
+      border-color: var(--gold) !important;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 1100;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--parchment);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(320px, 85vw);
+      height: 100vh;
+      background: rgba(18, 10, 4, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(201,133,42,0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1050;
+    }
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--parchment);
+      transition: color var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding-inline: 1.5rem;
+    }
+
+    /* Radial gradient background */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,133,42,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 100% at 50% 100%, rgba(10,5,2,0.85) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, #1A0F08 0%, #0d0704 45%, #000000 100%);
+      z-index: -1;
+    }
+
+    /* Decorative floating orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(201,133,42,0.12) 0%, transparent 70%);
+      top: -10%; left: -5%;
+      animation: orbFloat 12s ease-in-out infinite alternate;
+    }
+    .hero-orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,133,42,0.08) 0%, transparent 70%);
+      bottom: 5%; right: 5%;
+      animation: orbFloat 15s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes orbFloat {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,133,42,0.35);
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      margin-bottom: 2.25rem;
+      animation: fadeDown 1s ease 0.2s both;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 6.5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+      animation: fadeDown 1s ease 0.45s both;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--parchment2);
+      max-width: 500px;
+      margin-inline: auto;
+      margin-bottom: 2.75rem;
+      animation: fadeDown 1s ease 0.65s both;
+    }
+
+    .btn-gold {
+      display: inline-block;
+      font-family: 'Lora', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.5rem;
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+      transition: color 0.35s, box-shadow 0.35s;
+      animation: fadeDown 1s ease 0.85s both;
+    }
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      z-index: -1;
+    }
+    .btn-gold:hover { color: var(--espresso); box-shadow: 0 0 30px rgba(201,133,42,0.35); }
+    .btn-gold:hover::before { transform: scaleX(1); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeDown 1s ease 1.2s both;
+    }
+    .hero-scroll-hint span {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(1); }
+      50%      { opacity: 1;   transform: scaleY(1.15); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       DIVIDER
+    ═══════════════════════════════════════════════════════════════ */
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--gold-dim);
+      margin-block: 1.5rem;
+    }
+    .gold-divider::before,
+    .gold-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim));
+    }
+    .gold-divider::after { background: linear-gradient(to left, transparent, var(--gold-dim)); }
+    .gold-divider-icon { font-size: 0.9rem; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════════════════════════ */
+    #about { background: var(--espresso); position: relative; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 6vw, 6rem);
+      align-items: center;
+    }
+
+    /* Decorative framed quote */
+    .about-quote-frame {
+      position: relative;
+      padding: 3rem 2.5rem;
+      border: 1px solid rgba(201,133,42,0.25);
+    }
+    /* Corner ornaments */
+    .about-quote-frame::before,
+    .about-quote-frame::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .about-quote-frame::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .about-quote-frame::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    .about-quote-inner {
+      position: relative;
+    }
+    .about-quote-inner::before,
+    .about-quote-inner::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .about-quote-inner::before { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+    .about-quote-inner::after  { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 0.6;
+      color: var(--gold);
+      opacity: 0.35;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .about-quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+
+    .quote-attr {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .about-copy h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-copy p {
+      color: var(--parchment2);
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .about-signature {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-top: 1.75rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MENU
+    ═══════════════════════════════════════════════════════════════ */
+    #menu {
+      background: linear-gradient(170deg, #110900 0%, #1A0F08 40%, #120A04 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    #menu::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(201,133,42,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .menu-header { text-align: center; margin-bottom: 4rem; }
+    .menu-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--cream);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+
+    .menu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s;
+      cursor: default;
+    }
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,133,42,0.07) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(201,133,42,0.15), 0 0 0 1px rgba(201,133,42,0.25);
+    }
+    .menu-card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 64px; height: 64px;
+      margin-inline: auto;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+      opacity: 0.85;
+      transition: opacity 0.3s;
+    }
+    .menu-card:hover .card-icon { opacity: 1; }
+
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-price {
+      display: inline-block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--gold);
+      border-top: 1px solid rgba(201,133,42,0.25);
+      padding-top: 0.75rem;
+      width: 100%;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       AMBIENCE
+    ═══════════════════════════════════════════════════════════════ */
+    #ambience {
+      position: relative;
+      background:
+        linear-gradient(to bottom, #120A04, #1A0F08 50%, #120A04);
+      text-align: center;
+      overflow: hidden;
+    }
+    #ambience::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E")
+        repeat;
+      background-size: 200px;
+      pointer-events: none;
+    }
+
+    .ambience-inner { position: relative; z-index: 1; max-width: 760px; margin-inline: auto; }
+
+    .ambience-rule {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-block: 2rem;
+    }
+    .ambience-rule::before,
+    .ambience-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,133,42,0.5), transparent);
+    }
+
+    .ambience-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .ambience-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 600;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.35;
+    }
+    .ambience-quote em { color: var(--gold); font-style: normal; }
+
+    .ambience-sub {
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1.75rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       VISIT US
+    ═══════════════════════════════════════════════════════════════ */
+    #visit {
+      background: var(--espresso);
+      position: relative;
+    }
+
+    .visit-header { text-align: center; margin-bottom: 4rem; }
+    .visit-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--cream);
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    /* Hours table */
+    .hours-block h3 {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hours-table { width: 100%; border-collapse: collapse; }
+    .hours-table tr { border-bottom: 1px solid rgba(201,133,42,0.1); }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td {
+      padding: 0.7rem 0;
+      font-size: 0.92rem;
+      color: var(--parchment2);
+    }
+    .hours-table td:last-child { text-align: right; color: var(--muted); }
+    .hours-table tr.today td { color: var(--gold); }
+    .hours-table tr.closed td { color: var(--muted); opacity: 0.6; }
+
+    .address-block {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(201,133,42,0.15);
+    }
+    .address-block h3 {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .address-block p {
+      color: var(--parchment2);
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+
+    /* Map placeholder */
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background:
+        linear-gradient(135deg, #1f1008 0%, #2a1408 50%, #1a0d06 100%);
+      border: 1px solid rgba(201,133,42,0.2);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .map-placeholder:hover { border-color: rgba(201,133,42,0.4); }
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 20 L40 20 M20 0 L20 40' stroke='rgba(201,133,42,0.05)' stroke-width='1'/%3E%3C/svg%3E")
+        repeat;
+      background-size: 40px 40px;
+    }
+    .map-pin-svg {
+      color: var(--gold);
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+      animation: pinBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes pinBounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+    .map-text {
+      position: relative;
+      z-index: 1;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--parchment2);
+    }
+    .map-sub {
+      position: relative;
+      z-index: 1;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════════ */
+    #footer {
+      background: var(--espresso2);
+      border-top: 1px solid rgba(201,133,42,0.15);
+      padding-block: 3rem 2rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .footer-logo span { color: var(--gold); }
+
+    .footer-tagline {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 2rem;
+    }
+    .footer-nav a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment2);
+      transition: color var(--transition);
+    }
+    .footer-nav a:hover { color: var(--gold); }
+
+    .footer-social {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(201,133,42,0.25);
+      border-radius: 50%;
+      color: var(--parchment2);
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+    .footer-social a:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(201,133,42,0.08);
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,133,42,0.2), transparent);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-quote-frame { order: 2; }
+      .about-copy { order: 1; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .visit-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .menu-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+      .hero-title { font-size: 2.2rem; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       OVERLAY CLOSE (mobile menu backdrop)
+    ═══════════════════════════════════════════════════════════════ */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1020;
+    }
+    .menu-overlay.open { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ──────────────── NAVBAR ──────────────── -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Ember &amp; Ground home">Ember <span>&amp;</span> Ground</a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#about">Our Story</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#ambience">Ambience</a></li>
+      <li><a href="#visit">Visit Us</a></li>
+      <li><a href="#visit" class="nav-cta">Reserve</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+  <a href="#about"    class="mobile-nav-link">Our Story</a>
+  <a href="#menu"     class="mobile-nav-link">Menu</a>
+  <a href="#ambience" class="mobile-nav-link">Ambience</a>
+  <a href="#visit"    class="mobile-nav-link">Visit Us</a>
+  <a href="#visit"    class="mobile-nav-link" style="color:var(--gold)">Reserve a Table</a>
+</nav>
+
+<!-- ──────────────── HERO ──────────────── -->
+<section id="hero" class="grain">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-content">
+    <span class="hero-badge">Est. 2017 &nbsp;·&nbsp; Artisan Café</span>
+
+    <h1 class="hero-title">
+      Where Every Cup<br><em>Tells a Story</em>
+    </h1>
+
+    <p class="hero-sub">
+      Hand-crafted espresso, slow mornings, and the warmth of a place that feels like home.
+    </p>
+
+    <a href="#visit" class="btn-gold" id="heroReserveCta">Reserve a Table</a>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>Discover</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ──────────────── ABOUT ──────────────── -->
+<section id="about" aria-label="About Ember and Ground">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- Left: framed quote -->
+      <div class="about-quote-frame reveal">
+        <div class="about-quote-inner">
+          <span class="quote-mark">"</span>
+          <p class="about-quote-text">
+            There is something sacred about the ritual of morning coffee — the way steam rises, the way warmth spreads from the cup into the hands, into the heart.
+          </p>
+          <span class="quote-attr">— Élise Moreau, Head Roaster</span>
+        </div>
+      </div>
+
+      <!-- Right: brand story -->
+      <div class="about-copy reveal reveal-delay-2">
+        <p class="section-label">Our Story</p>
+        <h2>Born from Passion,<br>Brewed with Purpose</h2>
+
+        <div class="gold-divider"><span class="gold-divider-icon">✦</span></div>
+
+        <p>
+          Ember &amp; Ground began in a narrow cobblestone lane in 2017, founded by two friends who believed that exceptional coffee deserved an exceptional setting. We source single-origin beans from small family farms across Ethiopia, Colombia, and Guatemala — relationships built on trust, fairness, and a shared reverence for the craft.
+        </p>
+        <p>
+          Every detail of our space — the worn leather chairs, the low amber lighting, the hand-lettered chalkboards — is an invitation to slow down. To be present. To let the cup in your hands become a small, perfect moment.
+        </p>
+        <p>
+          We don't just serve coffee. We tend to the quiet spaces between conversations.
+        </p>
+
+        <p class="about-signature">— Ember &amp; Ground</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── MENU ──────────────── -->
+<section id="menu" aria-label="Menu Highlights">
+  <div class="container">
+    <div class="menu-header reveal">
+      <p class="section-label">From Our Kitchen</p>
+      <h2>Menu Highlights</h2>
+      <div class="gold-divider" style="max-width:300px;margin:1.25rem auto 0"><span class="gold-divider-icon">✦</span></div>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- Card 1: Signature Espresso -->
+      <div class="menu-card reveal reveal-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="64" height="64" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Cup -->
+            <path d="M14 28h28l-3 16H17L14 28z" stroke-width="1.8"/>
+            <!-- Saucer -->
+            <ellipse cx="28" cy="46" rx="18" ry="3" stroke-width="1.8"/>
+            <!-- Handle -->
+            <path d="M42 32 C52 32 52 40 42 40" stroke-width="1.8"/>
+            <!-- Steam -->
+            <path d="M22 20 C22 17 24 15 24 12" stroke-width="1.5" stroke-dasharray="1 2"/>
+            <path d="M28 20 C28 17 30 15 30 12" stroke-width="1.5" stroke-dasharray="1 2"/>
+            <path d="M34 20 C34 17 36 15 36 12" stroke-width="1.5" stroke-dasharray="1 2"/>
+          </svg>
+        </div>
+        <h3 class="card-name">Signature Espresso</h3>
+        <p class="card-desc">A double-shot pulled slow, with notes of dark chocolate, smoked walnut, and a lingering caramel finish. Our anchor, our identity.</p>
+        <span class="card-price">$4.50</span>
+      </div>
+
+      <!-- Card 2: Avocado Toast -->
+      <div class="menu-card reveal reveal-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="64" height="64" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Bread slice -->
+            <path d="M10 42 Q10 30 32 26 Q54 30 54 42 L50 52 H14Z" stroke-width="1.8"/>
+            <!-- Avocado spread -->
+            <path d="M16 40 Q16 32 32 30 Q48 32 48 40" stroke-width="1.5" stroke-dasharray="2 2"/>
+            <!-- Avocado pit -->
+            <circle cx="32" cy="37" r="4" stroke-width="1.8"/>
+            <!-- Seasoning dots -->
+            <circle cx="22" cy="44" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="28" cy="46" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="36" cy="46" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="42" cy="44" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <h3 class="card-name">Avocado Toast</h3>
+        <p class="card-desc">Sourdough from our local bakery, topped with smashed avocado, chilli flakes, microgreens, and a drizzle of cold-pressed olive oil.</p>
+        <span class="card-price">$13.00</span>
+      </div>
+
+      <!-- Card 3: Cardamom Latte -->
+      <div class="menu-card reveal reveal-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="64" height="64" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Tall glass -->
+            <path d="M20 14 L18 52 H46 L44 14Z" stroke-width="1.8"/>
+            <!-- Milk layers -->
+            <line x1="20" y1="28" x2="44" y2="28" stroke-width="1.2" stroke-dasharray="2 2"/>
+            <line x1="19" y1="38" x2="45" y2="38" stroke-width="1.2" stroke-dasharray="2 2"/>
+            <!-- Straw -->
+            <line x1="38" y1="10" x2="36" y2="52" stroke-width="2"/>
+            <!-- Cardamom pod -->
+            <ellipse cx="26" cy="22" rx="3" ry="5" stroke-width="1.5" transform="rotate(-20 26 22)"/>
+            <line x1="26" y1="17.5" x2="26" y2="26.5" stroke-width="1" transform="rotate(-20 26 22)"/>
+            <!-- Steam -->
+            <path d="M28 10 C28 7 30 5 30 3" stroke-width="1.5" stroke-dasharray="1 2"/>
+          </svg>
+        </div>
+        <h3 class="card-name">Cardamom Latte</h3>
+        <p class="card-desc">Espresso married with house-made cardamom syrup and silky oat milk, lightly dusted with ground cardamom. Warmth in every sip.</p>
+        <span class="card-price">$6.00</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── AMBIENCE ──────────────── -->
+<section id="ambience" aria-label="Ambience">
+  <div class="container">
+    <div class="ambience-inner">
+
+      <p class="section-label reveal">The Ember &amp; Ground Experience</p>
+
+      <div class="ambience-rule reveal reveal-delay-1">
+        <div class="ambience-diamond"></div>
+      </div>
+
+      <blockquote class="ambience-quote reveal reveal-delay-2">
+        "Coffee is our <em>craft.</em><br>Comfort is our <em>promise.</em>"
+      </blockquote>
+
+      <div class="ambience-rule reveal reveal-delay-3">
+        <div class="ambience-diamond"></div>
+      </div>
+
+      <p class="ambience-sub reveal reveal-delay-4">Hand-roasted · Single Origin · Ethically Sourced</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── VISIT US ──────────────── -->
+<section id="visit" aria-label="Visit Us">
+  <div class="container">
+    <div class="visit-header reveal">
+      <p class="section-label">Come Find Us</p>
+      <h2>Visit Us</h2>
+    </div>
+
+    <div class="visit-grid">
+
+      <!-- Hours + Address -->
+      <div>
+        <div class="hours-block reveal reveal-delay-1">
+          <h3>Opening Hours</h3>
+          <table class="hours-table" aria-label="Opening hours">
+            <tbody>
+              <tr><td>Monday</td><td>7:00 am – 7:00 pm</td></tr>
+              <tr><td>Tuesday</td><td>7:00 am – 7:00 pm</td></tr>
+              <tr><td>Wednesday</td><td>7:00 am – 7:00 pm</td></tr>
+              <tr><td>Thursday</td><td>7:00 am – 8:00 pm</td></tr>
+              <tr><td>Friday</td><td>7:00 am – 9:00 pm</td></tr>
+              <tr><td>Saturday</td><td>8:00 am – 9:00 pm</td></tr>
+              <tr class="closed"><td>Sunday</td><td>Closed</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="address-block reveal reveal-delay-2">
+          <h3>Address &amp; Contact</h3>
+          <p>
+            14 Rue de la Lumière<br>
+            Paris, 75004 · France<br><br>
+            <a href="tel:+33142001234" style="color:var(--gold)">+33 1 42 00 12 34</a><br>
+            <a href="mailto:hello@emberandground.com" style="color:var(--muted)">hello@emberandground.com</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-placeholder reveal reveal-delay-3" role="img" aria-label="Map showing Ember and Ground location">
+        <svg class="map-pin-svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        <p class="map-text">Find Us Here</p>
+        <p class="map-sub">14 Rue de la Lumière · Paris</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── FOOTER ──────────────── -->
+<footer id="footer" role="contentinfo">
+  <div class="container footer-inner">
+
+    <div>
+      <div class="footer-logo">Ember <span>&amp;</span> Ground</div>
+      <p class="footer-tagline">Artisan Café · Est. 2017</p>
+    </div>
+
+    <div class="footer-rule"></div>
+
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="#about">Our Story</a>
+      <a href="#menu">Menu</a>
+      <a href="#ambience">Ambience</a>
+      <a href="#visit">Visit Us</a>
+      <a href="#visit">Reserve</a>
+    </nav>
+
+    <div class="footer-social" aria-label="Social media links">
+      <!-- Instagram -->
+      <a href="#" id="instagramLink" aria-label="Ember and Ground on Instagram" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <!-- Facebook -->
+      <a href="#" id="facebookLink" aria-label="Ember and Ground on Facebook" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="footer-rule"></div>
+
+    <p class="footer-copy">© 2026 Ember &amp; Ground. All rights reserved. Crafted with care.</p>
+
+  </div>
+</footer>
+
+<!-- ──────────────── JAVASCRIPT ──────────────── -->
+<script>
+  /* ── Sticky Nav ── */
+  const navbar = document.getElementById('navbar');
+  const onScroll = () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── Hamburger / Mobile Menu ── */
+  const hamburgerBtn  = document.getElementById('hamburgerBtn');
+  const mobileMenu    = document.getElementById('mobileMenu');
+  const menuOverlay   = document.getElementById('menuOverlay');
+  const mobileLinks   = document.querySelectorAll('.mobile-nav-link');
+
+  function openMenu() {
+    hamburgerBtn.classList.add('open');
+    mobileMenu.classList.add('open');
+    menuOverlay.classList.add('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburgerBtn.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    menuOverlay.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  menuOverlay.addEventListener('click', closeMenu);
+  mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+  /* ── Scroll Reveal (IntersectionObserver) ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => revealObserver.observe(el));
+
+  /* ── Highlight today's hours row ── */
+  (function highlightToday() {
+    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const today = dayNames[new Date().getDay()];
+    const rows = document.querySelectorAll('.hours-table tr');
+    rows.forEach(row => {
+      if (row.cells[0] && row.cells[0].textContent.trim() === today) {
+        row.classList.add('today');
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meridian Properties — Luxury Real Estate</title>
+  <meta name="description" content="Meridian Properties — Discover luxury residential and commercial properties curated for discerning buyers. 12+ years of trusted real estate expertise." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Tokens ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:      #FFFFFF;
+      --off-white:  #F5F4F0;
+      --navy:       #0E1C36;
+      --navy-mid:   #162845;
+      --gold:       #B5924C;
+      --gold-light: #D4AF77;
+      --gold-pale:  #F0E8D8;
+      --text:       #2D3748;
+      --text-muted: #718096;
+      --border:     #E8E5DF;
+
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+
+      --section-pad: clamp(4rem, 8vw, 7rem);
+      --container: 1220px;
+      --radius: 2px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    /* ─── Gold Rule ──────────────────────────────────────── */
+    .gold-rule {
+      width: 60px;
+      height: 1.5px;
+      background: var(--gold);
+      display: block;
+    }
+
+    /* ─── Section Eyebrow ────────────────────────────────── */
+    .eyebrow {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .eyebrow::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* ─── Scroll Animation ───────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ═══════════════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.5rem 0;
+      transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
+    }
+    #nav.scrolled {
+      background: rgba(255,255,255,0.97);
+      box-shadow: 0 1px 0 var(--border), 0 4px 24px rgba(14,28,54,0.06);
+      padding: 1rem 0;
+    }
+    #nav .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--navy);
+      padding: 0.7rem 1.5rem;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+    .nav-cta:hover { background: var(--gold); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--navy);
+      transition: var(--transition);
+    }
+
+    /* Mobile nav */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--navy);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-size: 2rem;
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-left {
+      background: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(6rem, 10vw, 8rem) clamp(2rem, 5vw, 5rem);
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-heading {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-heading em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 400px;
+      margin-bottom: 2.75rem;
+      font-weight: 300;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.95rem 2.2rem;
+      border-radius: var(--radius);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-gold:hover {
+      background: #9a7a3d;
+      transform: translateY(-1px);
+    }
+    .btn-ghost {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      border-bottom: 1px solid var(--navy);
+      padding-bottom: 2px;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-num {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* Hero right — decorative */
+    .hero-right {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-image-frame {
+      position: relative;
+      width: 75%;
+      aspect-ratio: 3/4;
+      max-height: 70vh;
+    }
+
+    /* Decorative frame lines */
+    .hero-image-frame::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 100%; height: 100%;
+      border: 1.5px solid var(--gold);
+      opacity: 0.4;
+      z-index: 1;
+    }
+    .hero-image-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: -20px;
+      width: 60%; height: 60%;
+      border: 1.5px solid var(--gold);
+      opacity: 0.2;
+      z-index: 1;
+    }
+
+    .hero-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(170deg, #1a2e52 0%, #0a1628 40%, #0E1C36 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Stylised building silhouette via CSS */
+    .hero-img-placeholder::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 140%;
+      height: 80%;
+      background:
+        /* Windows grid */
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px, transparent 18px,
+          rgba(181,146,76,0.15) 18px, rgba(181,146,76,0.15) 20px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px, transparent 28px,
+          rgba(181,146,76,0.1) 28px, rgba(181,146,76,0.1) 30px
+        ),
+        linear-gradient(180deg, transparent 0%, #1a2e52 60%, #0d1b33 100%);
+      clip-path: polygon(
+        5% 100%, 5% 40%,
+        10% 40%, 10% 20%,
+        15% 20%, 15% 40%,
+        30% 40%, 30% 10%,
+        35% 10%, 35% 40%,
+        45% 40%, 45% 30%,
+        50% 30%, 50% 40%,
+        55% 40%, 55% 15%,
+        62% 15%, 62% 40%,
+        70% 40%, 70% 25%,
+        78% 25%, 78% 40%,
+        85% 40%, 85% 50%,
+        90% 50%, 90% 40%,
+        95% 40%, 95% 100%
+      );
+    }
+    .hero-img-placeholder::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 35%;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(181,146,76,0.05) 40%,
+        rgba(181,146,76,0.12) 100%
+      );
+    }
+
+    .hero-img-badge {
+      position: absolute;
+      bottom: 2rem;
+      left: -2rem;
+      background: var(--gold);
+      color: var(--white);
+      padding: 1rem 1.5rem;
+      z-index: 2;
+    }
+    .hero-img-badge .badge-num {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .hero-img-badge .badge-txt {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* Floating circles bg */
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(181,146,76,0.1);
+    }
+    .hero-circle-1 { width: 350px; height: 350px; top: -80px; right: -80px; }
+    .hero-circle-2 { width: 200px; height: 200px; bottom: 60px; left: 20px; }
+
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+      margin: 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       FEATURED LISTINGS
+    ═══════════════════════════════════════════════════════ */
+    #listings {
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+
+    .section-header {
+      margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 500;
+      color: var(--navy);
+      margin-top: 0.75rem;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      font-weight: 300;
+    }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .property-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(14,28,54,0.05);
+      transition: box-shadow var(--transition), transform var(--transition), border-bottom-color var(--transition);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .property-card:hover {
+      box-shadow: 0 8px 40px rgba(14,28,54,0.12);
+      transform: translateY(-4px);
+      border-bottom-color: var(--gold);
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradient placeholder images */
+    .card-img-1 {
+      background:
+        linear-gradient(145deg, #1a3a5c 0%, #2d5a8e 40%, #1e4a7a 70%, #0e2a4a 100%);
+    }
+    .card-img-2 {
+      background:
+        linear-gradient(145deg, #2a1a3e 0%, #4a2d6e 40%, #3a1e5a 70%, #1a0e2a 100%);
+    }
+    .card-img-3 {
+      background:
+        linear-gradient(145deg, #1a3a2a 0%, #2d5e3e 40%, #1e4a30 70%, #0e2a18 100%);
+    }
+
+    /* Building silhouette on cards */
+    .card-img::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 60%;
+      background: inherit;
+      filter: brightness(0.5);
+      clip-path: polygon(
+        0% 100%, 0% 55%, 8% 55%, 8% 30%, 16% 30%, 16% 55%,
+        28% 55%, 28% 15%, 34% 15%, 34% 55%,
+        48% 55%, 48% 35%, 55% 35%, 55% 55%,
+        64% 55%, 64% 20%, 72% 20%, 72% 55%,
+        82% 55%, 82% 40%, 90% 40%, 90% 55%,
+        100% 55%, 100% 100%
+      );
+    }
+    .card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3) 100%);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      z-index: 2;
+    }
+
+    .card-body { padding: 1.5rem; }
+
+    .card-location {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .card-location svg { flex-shrink: 0; }
+
+    .card-name {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .card-stats {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .card-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .card-stat svg { color: var(--gold); }
+    .card-stat strong { color: var(--navy); font-weight: 600; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-price {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .card-price span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-family: var(--sans);
+    }
+    .card-link {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap var(--transition);
+    }
+    .card-link:hover { gap: 8px; }
+
+    /* ═══════════════════════════════════════════════════════
+       SERVICES
+    ═══════════════════════════════════════════════════════ */
+    #services {
+      padding: var(--section-pad) 0;
+      background: var(--off-white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      padding: 2.5rem 2rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .service-card:hover {
+      box-shadow: 0 12px 48px rgba(14,28,54,0.1);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.75rem;
+    }
+    .service-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.2;
+    }
+
+    .service-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 1.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: gap var(--transition);
+    }
+    .service-link:hover { gap: 10px; }
+
+    /* ═══════════════════════════════════════════════════════
+       WHY MERIDIAN — METRICS
+    ═══════════════════════════════════════════════════════ */
+    #metrics {
+      padding: var(--section-pad) 0;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #metrics::before {
+      content: 'M';
+      font-family: var(--serif);
+      font-size: 40vw;
+      font-weight: 700;
+      color: rgba(255,255,255,0.02);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .metrics-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .metrics-header .eyebrow { justify-content: center; color: var(--gold-light); }
+    .metrics-header .eyebrow::after { background: var(--gold-light); }
+    .metrics-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      color: var(--white);
+      font-weight: 500;
+      margin-top: 0.75rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .metric-block {
+      padding: 3rem 2.5rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      position: relative;
+    }
+    .metric-block:last-child { border-right: none; }
+    .metric-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 30px; height: 2px;
+      background: var(--gold);
+    }
+
+    .metric-num {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+    .metric-num em { color: var(--gold); font-style: normal; }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       HOW IT WORKS
+    ═══════════════════════════════════════════════════════ */
+    #process {
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+
+    .process-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+
+    .process-left .section-header { margin-bottom: 0; }
+
+    .process-steps {
+      position: relative;
+      margin-top: 3rem;
+    }
+
+    /* Gold vertical line */
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 22px;
+      width: 1.5px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-light), transparent);
+    }
+
+    .process-step {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .process-step:last-child { margin-bottom: 0; }
+
+    .step-num {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      z-index: 1;
+    }
+    .step-content { padding-top: 6px; }
+    .step-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .process-right {
+      position: relative;
+    }
+
+    .process-visual {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: linear-gradient(145deg, #f0ece4, #e8e2d8);
+      position: relative;
+      overflow: hidden;
+    }
+    .process-visual::before {
+      content: '';
+      position: absolute;
+      top: 2rem; right: 2rem;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      border: 1.5px solid var(--gold);
+      opacity: 0.35;
+    }
+
+    /* Interior scene gradient */
+    .process-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 70%, rgba(181,146,76,0.15) 0%, transparent 60%),
+        linear-gradient(145deg,
+          rgba(240, 236, 228, 1) 0%,
+          rgba(200, 190, 175, 1) 50%,
+          rgba(165, 148, 118, 1) 100%
+        );
+    }
+
+    /* Floor lines */
+    .pv-floor {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      z-index: 1;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(181,146,76,0.07) 0px, rgba(181,146,76,0.07) 1px,
+          transparent 1px, transparent 80px
+        ),
+        linear-gradient(180deg, transparent, rgba(181,146,76,0.08));
+    }
+
+    .process-badge {
+      position: absolute;
+      bottom: -1.5rem;
+      left: -1.5rem;
+      background: var(--navy);
+      color: var(--white);
+      padding: 1.5rem;
+      min-width: 160px;
+      z-index: 2;
+    }
+    .process-badge .badge-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .process-badge .badge-val {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       TESTIMONIALS
+    ═══════════════════════════════════════════════════════ */
+    #testimonials {
+      padding: var(--section-pad) 0;
+      background: var(--navy);
+      position: relative;
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .testimonials-header .eyebrow { justify-content: center; color: var(--gold-light); }
+    .testimonials-header .eyebrow::after { background: var(--gold-light); }
+    .testimonials-header .section-title { color: var(--white); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      padding: 3rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      transition: background var(--transition);
+    }
+    .testimonial-card:hover { background: rgba(255,255,255,0.05); }
+
+    .testimonial-accent {
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #8a6e38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .author-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .author-role {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-stars svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════════════════ */
+    #contact {
+      padding: var(--section-pad) 0;
+      background: var(--off-white);
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+    }
+
+    .contact-info .section-header { margin-bottom: 2.5rem; }
+
+    .contact-detail {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+
+    .contact-detail-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .contact-detail-val {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--navy);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* Form */
+    .contact-form-wrap {
+      background: var(--white);
+      padding: clamp(2rem, 4vw, 3rem);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 32px rgba(14,28,54,0.06);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--navy);
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      width: 100%;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(181,146,76,0.12);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B5924C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .btn-navy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      margin-top: 0.5rem;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-navy:hover {
+      background: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════ */
+    #footer {
+      background: #080f1e;
+      padding: 5rem 0 2rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.6fr repeat(3, 1fr);
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--white);
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-tagline {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      max-width: 280px;
+      font-weight: 300;
+    }
+    .footer-social {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .social-icon:hover {
+      border-color: var(--gold);
+      background: rgba(181,146,76,0.1);
+    }
+    .social-icon svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 1.5; }
+    .social-icon:hover svg { stroke: var(--gold); }
+
+    .footer-col-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.02em;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .footer-links a {
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.45);
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-bottom a { color: rgba(255,255,255,0.35); transition: color var(--transition); }
+    .footer-bottom a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .listings-grid { grid-template-columns: 1fr 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-block:nth-child(2) { border-right: none; }
+      .metric-block:nth-child(3) { border-right: 1px solid rgba(255,255,255,0.08); border-top: 1px solid rgba(255,255,255,0.08); }
+      .metric-block:last-child { border-top: 1px solid rgba(255,255,255,0.08); }
+    }
+
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { min-height: 50vh; }
+      .hero-img-badge { left: 1rem; }
+
+      .process-wrap { grid-template-columns: 1fr; }
+      .process-right { display: none; }
+
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      .listings-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+
+      .form-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+      .metric-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="Meridian Properties home">Meridian<span>.</span></a>
+
+      <ul class="nav-links">
+        <li><a href="#listings">Properties</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">How It Works</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <a href="#contact" class="nav-cta" id="nav-enquire-btn">Book Consultation</a>
+
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <button class="mobile-close" id="mobile-close-btn" aria-label="Close menu">&#x2715;</button>
+  <a href="#listings" class="mobile-link">Properties</a>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#process" class="mobile-link">How It Works</a>
+  <a href="#testimonials" class="mobile-link">Testimonials</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero" aria-label="Hero section">
+  <!-- Left -->
+  <div class="hero-left">
+    <p class="hero-eyebrow reveal">Premier Properties &mdash; Est. 2012</p>
+
+    <h1 class="hero-heading reveal reveal-delay-1">
+      Find a Home<br/>That <em>Defines</em> You
+    </h1>
+
+    <p class="hero-sub reveal reveal-delay-2">
+      Meridian curates exceptional residential and commercial properties, connecting visionary buyers with spaces that inspire. Every listing is a statement.
+    </p>
+
+    <div class="hero-actions reveal reveal-delay-3">
+      <a href="#listings" class="btn-gold" id="hero-explore-btn">
+        Explore Properties
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="#contact" class="btn-ghost">Book a Viewing</a>
+    </div>
+
+    <div class="hero-stats reveal reveal-delay-4">
+      <div>
+        <div class="hero-stat-num">800<span style="color:var(--gold)">+</span></div>
+        <div class="hero-stat-label">Properties Sold</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">98<span style="color:var(--gold)">%</span></div>
+        <div class="hero-stat-label">Client Satisfaction</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">12<span style="color:var(--gold)">+</span></div>
+        <div class="hero-stat-label">Years Experience</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right — decorative -->
+  <div class="hero-right">
+    <div class="hero-circle hero-circle-1"></div>
+    <div class="hero-circle hero-circle-2"></div>
+
+    <div class="hero-image-frame">
+      <div class="hero-img-placeholder" aria-label="Architectural building silhouette illustration"></div>
+      <div class="hero-img-badge">
+        <div class="badge-num">3</div>
+        <div class="badge-txt">Cities Covered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     FEATURED LISTINGS
+═══════════════════════════════════════ -->
+<section id="listings" aria-label="Featured property listings">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Featured Listings</span>
+      <h2 class="section-title">Handpicked for the Discerning Buyer</h2>
+      <p class="section-subtitle">Curated properties across our most sought-after neighbourhoods.</p>
+    </div>
+
+    <div class="listings-grid">
+      <!-- Card 1 -->
+      <article class="property-card reveal reveal-delay-1">
+        <div class="card-img card-img-1" role="img" aria-label="Skyline Residences property image">
+          <div class="card-badge">For Sale</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Mumbai, Bandra West
+          </div>
+          <h3 class="card-name">Skyline Residences</h3>
+          <div class="card-stats">
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21V7l9-5 9 5v14M9 21v-8h6v8"/></svg>
+              <strong>4</strong> Beds
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 15h14M5 15a2 2 0 0 1-2-2V7h4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3M19 15a2 2 0 0 0 2-2V7h-4M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+              <strong>3</strong> Baths
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
+              <strong>2,850</strong> sqft
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹4.2 Cr <span>/ onwards</span></div>
+            <a href="#contact" class="card-link">
+              View
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="property-card reveal reveal-delay-2">
+        <div class="card-img card-img-2" role="img" aria-label="The Crescent Tower property image">
+          <div class="card-badge" style="background:var(--navy)">New Launch</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Delhi, Lutyens Zone
+          </div>
+          <h3 class="card-name">The Crescent Tower</h3>
+          <div class="card-stats">
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21V7l9-5 9 5v14M9 21v-8h6v8"/></svg>
+              <strong>3</strong> Beds
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 15h14M5 15a2 2 0 0 1-2-2V7h4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3M19 15a2 2 0 0 0 2-2V7h-4M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+              <strong>2</strong> Baths
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
+              <strong>1,920</strong> sqft
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹6.8 Cr <span>/ onwards</span></div>
+            <a href="#contact" class="card-link">
+              View
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="property-card reveal reveal-delay-3">
+        <div class="card-img card-img-3" role="img" aria-label="Emerald Gardens Villa property image">
+          <div class="card-badge" style="background:#2d6a4f">Premium Villa</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Bangalore, Whitefield
+          </div>
+          <h3 class="card-name">Emerald Gardens Villa</h3>
+          <div class="card-stats">
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21V7l9-5 9 5v14M9 21v-8h6v8"/></svg>
+              <strong>5</strong> Beds
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 15h14M5 15a2 2 0 0 1-2-2V7h4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3M19 15a2 2 0 0 0 2-2V7h-4M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+              <strong>4</strong> Baths
+            </div>
+            <div class="card-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
+              <strong>4,400</strong> sqft
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹3.5 Cr <span>/ onwards</span></div>
+            <a href="#contact" class="card-link">
+              View
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════ -->
+<section id="services" aria-label="Our services">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center; max-width: 600px; margin: 0 auto 0;">
+      <span class="eyebrow" style="justify-content:center;">What We Do</span>
+      <h2 class="section-title">Full-Spectrum Real Estate Services</h2>
+      <p class="section-subtitle">From first enquiry to final handover, we handle every detail with precision.</p>
+    </div>
+
+    <div class="services-grid">
+      <!-- Residential Sales -->
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <polyline points="4,28 24,8 44,28" />
+            <polyline points="10,22 10,42 38,42 38,22" />
+            <rect x="18" y="30" width="12" height="12"/>
+            <line x1="14" y1="42" x2="14" y2="28"/>
+            <line x1="34" y1="42" x2="34" y2="28"/>
+          </svg>
+        </div>
+        <h3 class="service-title">Residential Sales</h3>
+        <p class="service-desc">Expertly matched homes for families, investors and first-time buyers. We navigate the full transaction lifecycle with clarity and care.</p>
+        <a href="#contact" class="service-link">
+          Learn more
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Commercial Leasing -->
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="4" y="10" width="40" height="32" rx="1"/>
+            <path d="M4 18h40"/>
+            <path d="M16 10V6M32 10V6"/>
+            <path d="M14 26h6M14 32h8M28 26h6M28 32h6"/>
+          </svg>
+        </div>
+        <h3 class="service-title">Commercial Leasing</h3>
+        <p class="service-desc">Strategic office, retail, and industrial spaces aligned with your business goals. Competitive lease negotiation and market analysis included.</p>
+        <a href="#contact" class="service-link">
+          Learn more
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Property Management -->
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="18"/>
+            <path d="M24 14v10l7 7"/>
+            <path d="M16 8l2 4M32 8l-2 4M8 16l4 2M40 16l-4 2"/>
+          </svg>
+        </div>
+        <h3 class="service-title">Property Management</h3>
+        <p class="service-desc">Ongoing asset management, tenant relations, and maintenance oversight — we protect your investment so you can focus on what matters.</p>
+        <a href="#contact" class="service-link">
+          Learn more
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     WHY MERIDIAN — METRICS
+═══════════════════════════════════════ -->
+<section id="metrics" aria-label="Meridian Properties statistics">
+  <div class="container">
+    <div class="metrics-header reveal">
+      <span class="eyebrow">Why Meridian</span>
+      <h2 class="metrics-title">Numbers That Speak for Themselves</h2>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-block reveal reveal-delay-1">
+        <div class="metric-num">12<em>+</em></div>
+        <div class="metric-label">Years of Experience</div>
+      </div>
+      <div class="metric-block reveal reveal-delay-2">
+        <div class="metric-num">800<em>+</em></div>
+        <div class="metric-label">Properties Sold</div>
+      </div>
+      <div class="metric-block reveal reveal-delay-3">
+        <div class="metric-num">3</div>
+        <div class="metric-label">Cities Covered</div>
+      </div>
+      <div class="metric-block reveal reveal-delay-4">
+        <div class="metric-num">98<em>%</em></div>
+        <div class="metric-label">Client Satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════ -->
+<section id="process" aria-label="How Meridian works">
+  <div class="container">
+    <div class="process-wrap">
+      <div class="process-left">
+        <div class="section-header reveal">
+          <span class="eyebrow">The Process</span>
+          <h2 class="section-title">Three Steps to Your Perfect Property</h2>
+          <p class="section-subtitle">A refined, guided journey from wish-list to keys-in-hand.</p>
+        </div>
+
+        <div class="process-steps">
+          <div class="process-step reveal reveal-delay-1">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h3 class="step-title">Tell Us What You Need</h3>
+              <p class="step-desc">Share your vision — budget, location, lifestyle, purpose. Our advisors listen deeply before recommending a single property.</p>
+            </div>
+          </div>
+
+          <div class="process-step reveal reveal-delay-2">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h3 class="step-title">We Find the Match</h3>
+              <p class="step-desc">Our curated portfolio and exclusive off-market listings ensure you see only the options that truly fit. No noise, no compromise.</p>
+            </div>
+          </div>
+
+          <div class="process-step reveal reveal-delay-3">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h3 class="step-title">You Move In</h3>
+              <p class="step-desc">We handle legal due diligence, negotiations, documentation, and registration — so you arrive at your new home with complete peace of mind.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-right reveal">
+        <div class="process-visual" role="img" aria-label="Elegant interior room illustration">
+          <div class="pv-floor"></div>
+        </div>
+        <div class="process-badge">
+          <div class="badge-label">Avg. Time to Close</div>
+          <div class="badge-val">28 Days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════ -->
+<section id="testimonials" aria-label="Client testimonials">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <span class="eyebrow">Testimonials</span>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="testimonial-accent"></div>
+        <blockquote class="testimonial-quote">
+          "Meridian didn't just find us a flat — they found us a home that felt ours before we even moved in. The process was seamless, the team was exquisite, and the result exceeded every expectation."
+        </blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">Anika Sharma</div>
+            <div class="author-role">Homeowner, Bandra West</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="testimonial-accent"></div>
+        <blockquote class="testimonial-quote">
+          "As a commercial tenant looking for the right office in Delhi, I was pleasantly surprised by the precision and professionalism of Meridian's advisory. They understood our brand and matched us perfectly."
+        </blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background: linear-gradient(135deg, #1a3a5c, #2d5e8e);">R</div>
+          <div>
+            <div class="author-name">Rahul Mehra</div>
+            <div class="author-role">Founder, Mehra Ventures</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" style="opacity:0.15;" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════ -->
+<section id="contact" aria-label="Contact Meridian Properties">
+  <div class="container">
+    <div class="contact-wrap">
+      <!-- Left info -->
+      <div class="contact-info">
+        <div class="section-header reveal">
+          <span class="eyebrow">Get in Touch</span>
+          <h2 class="section-title">Let's Begin Your Journey</h2>
+          <p class="section-subtitle">Our advisors are available to guide you — in person, by phone, or digitally.</p>
+        </div>
+
+        <div class="contact-detail reveal reveal-delay-1">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Our Office</div>
+            <div class="contact-detail-val">14 Mahalaxmi Chambers<br/>Mumbai, Maharashtra 400 034</div>
+          </div>
+        </div>
+
+        <div class="contact-detail reveal reveal-delay-2">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.56 19a19.45 19.45 0 0 1-6-6 19.79 19.79 0 0 1-2.93-7.26A2 2 0 0 1 4.61 4h3a2 2 0 0 1 2 1.72A12.84 12.84 0 0 0 10.3 8.5a2 2 0 0 1-.45 2.11L8.09 12.37a16 16 0 0 0 3.54 3.54l1.76-1.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.78.69A2 2 0 0 1 20 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Phone</div>
+            <div class="contact-detail-val">+91 98200 45678</div>
+          </div>
+        </div>
+
+        <div class="contact-detail reveal reveal-delay-3">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-val">hello@meridianproperties.in</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form -->
+      <div class="contact-form-wrap reveal">
+        <form id="contact-form" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="form-name" class="form-label">Full Name</label>
+              <input type="text" id="form-name" name="name" class="form-input" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="form-email" class="form-label">Email Address</label>
+              <input type="email" id="form-email" name="email" class="form-input" placeholder="you@email.com" required />
+            </div>
+            <div class="form-group full">
+              <label for="form-interest" class="form-label">Property Interest</label>
+              <select id="form-interest" name="interest" class="form-select" required>
+                <option value="" disabled selected>Select your interest</option>
+                <option value="buy-residential">Buy — Residential</option>
+                <option value="buy-commercial">Buy — Commercial</option>
+                <option value="rent-residential">Rent — Residential</option>
+                <option value="rent-commercial">Rent — Commercial</option>
+                <option value="sell">Sell My Property</option>
+                <option value="management">Property Management</option>
+                <option value="consultation">General Consultation</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label for="form-message" class="form-label">Message</label>
+              <textarea id="form-message" name="message" class="form-textarea" placeholder="Tell us about your requirements, budget, preferred locations…"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn-navy" id="form-submit-btn">
+            Send Enquiry
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer id="footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-top">
+      <!-- Brand -->
+      <div class="footer-brand">
+        <span class="nav-logo">Meridian<span style="color:var(--gold)">.</span></span>
+        <p class="footer-tagline">Defining the standard in luxury real estate across India's most coveted addresses since 2012.</p>
+        <div class="footer-social">
+          <a href="#" class="social-icon" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Twitter / X">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="rgba(255,255,255,0.6)" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Nav col 1 -->
+      <div>
+        <h3 class="footer-col-title">Buy</h3>
+        <ul class="footer-links">
+          <li><a href="#listings">Residential</a></li>
+          <li><a href="#listings">Commercial</a></li>
+          <li><a href="#listings">Luxury Villas</a></li>
+          <li><a href="#listings">New Projects</a></li>
+          <li><a href="#listings">Plots & Land</a></li>
+        </ul>
+      </div>
+
+      <!-- Nav col 2 -->
+      <div>
+        <h3 class="footer-col-title">Rent &amp; Sell</h3>
+        <ul class="footer-links">
+          <li><a href="#services">Rent a Property</a></li>
+          <li><a href="#services">List Your Property</a></li>
+          <li><a href="#services">Rental Management</a></li>
+          <li><a href="#services">Valuation</a></li>
+        </ul>
+      </div>
+
+      <!-- Nav col 3 -->
+      <div>
+        <h3 class="footer-col-title">About</h3>
+        <ul class="footer-links">
+          <li><a href="#metrics">Our Story</a></li>
+          <li><a href="#metrics">Leadership</a></li>
+          <li><a href="#contact">Careers</a></li>
+          <li><a href="#contact">Press</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 Meridian Properties. All rights reserved.</p>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+  // ── Sticky nav on scroll ──────────────────────────────
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ── Mobile menu ───────────────────────────────────────
+  const hamburger  = document.getElementById('hamburger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileClose = document.getElementById('mobile-close-btn');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', openMenu);
+  mobileClose.addEventListener('click', closeMenu);
+  mobileLinks.forEach(l => l.addEventListener('click', closeMenu));
+
+  // ── IntersectionObserver scroll animations ────────────
+  const revealEls = document.querySelectorAll('.reveal');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── Contact form handler ──────────────────────────────
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('form-submit-btn');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name    = document.getElementById('form-name').value.trim();
+    const email   = document.getElementById('form-email').value.trim();
+    const interest = document.getElementById('form-interest').value;
+
+    if (!name || !email || !interest) {
+      // Simple shake animation on missing fields
+      form.style.animation = 'none';
+      form.offsetHeight; // reflow
+      return;
+    }
+
+    // Simulate send
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      submitBtn.innerHTML = 'Enquiry Sent ✓';
+      submitBtn.style.background = '#2d6a4f';
+      form.reset();
+      setTimeout(() => {
+        submitBtn.innerHTML = 'Send Enquiry <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>';
+        submitBtn.style.background = '';
+        submitBtn.disabled = false;
+      }, 3000);
+    }, 1200);
+  });
+
+  // ── Active nav link highlight on scroll ──────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navAnchors.forEach(a => {
+          a.style.color = a.getAttribute('href') === `#${id}` ? 'var(--gold)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>

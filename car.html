@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Detail Co. — Premium Car Detailing</title>
+  <meta name="description" content="Apex Detail Co. delivers professional car detailing, paint correction, ceramic coating, and interior deep cleaning. Book your detail today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0D0D0D;
+      --red:     #E8132A;
+      --red-dim: #a30e1e;
+      --white:   #FFFFFF;
+      --gray:    #1A1A1A;
+      --gray2:   #222222;
+      --gray3:   #2E2E2E;
+      --text-dim:#AAAAAA;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── SCROLLBAR ─────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    /* ─── NAV ───────────────────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4rem;
+      height: 72px;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+
+    #nav.scrolled {
+      background: rgba(13,13,13,0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(232,19,42,0.25);
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .nav-logo span { color: var(--red); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white);
+      padding: 0.6rem 1.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .nav-cta:hover { background: var(--red-dim); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13,13,13,0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--red); }
+
+    /* ─── SECTION DIVIDER ───────────────────────────────────────────── */
+    .red-divider {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red) 0%, transparent 100%);
+      margin: 0;
+    }
+
+    /* ─── FADE-IN ANIMATION ─────────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-up.delay-1 { transition-delay: 0.1s; }
+    .fade-up.delay-2 { transition-delay: 0.2s; }
+    .fade-up.delay-3 { transition-delay: 0.3s; }
+    .fade-up.delay-4 { transition-delay: 0.4s; }
+
+    /* ─── HERO ──────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 4rem 0 8rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 80% 40%, rgba(232,19,42,0.12) 0%, transparent 65%),
+        linear-gradient(135deg, #1a0a0b 0%, var(--black) 60%);
+      z-index: 0;
+    }
+
+    /* Diagonal stripe overlay */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 40px,
+        rgba(232,19,42,0.03) 40px,
+        rgba(232,19,42,0.03) 41px
+      );
+      z-index: 0;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(232,19,42,0.15);
+      border: 1px solid rgba(232,19,42,0.4);
+      padding: 0.35rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 2rem;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .hero-headline {
+      font-size: clamp(4rem, 10vw, 9.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-headline em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    /* Red animated underline */
+    .red-underline {
+      display: block;
+      height: 4px;
+      background: var(--red);
+      width: 0;
+      margin: 1.2rem 0 2rem;
+      animation: expandLine 1.2s 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes expandLine {
+      to { width: 420px; }
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-dim);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 2.8rem;
+    }
+
+    .hero-sub strong { color: var(--white); font-weight: 600; }
+
+    .hero-btns {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-red {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      padding: 1rem 2.4rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 2px solid var(--red);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-red::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.08);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .btn-red:hover { transform: translateY(-2px); }
+    .btn-red:hover::after { opacity: 1; }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      padding: 1rem 2.4rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 2px solid rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s, transform 0.2s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      z-index: 1;
+    }
+
+    .scroll-cue-line {
+      width: 40px;
+      height: 1px;
+      background: var(--red);
+      animation: scrollLine 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes scrollLine {
+      to { width: 70px; }
+    }
+
+    /* ─── SERVICES ──────────────────────────────────────────────────── */
+    #services {
+      padding: 7rem 4rem 7rem 8rem;
+      background: var(--black);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .section-title {
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 4rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5px;
+      max-width: 1100px;
+    }
+
+    .service-card {
+      background: var(--gray);
+      padding: 2.8rem 2.5rem;
+      position: relative;
+      border-left: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s;
+      cursor: default;
+    }
+
+    .service-card:hover {
+      border-left-color: var(--red);
+      transform: translateY(-6px);
+      background: var(--gray2);
+    }
+
+    .service-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: rgba(232,19,42,0.18);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .service-name {
+      font-size: 1.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+      line-height: 1.1;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-price {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(232,19,42,0.4);
+      padding: 0.3rem 0.9rem;
+    }
+
+    /* ─── STATS / WHY US ────────────────────────────────────────────── */
+    #stats {
+      padding: 5rem 4rem 5rem 8rem;
+      background: var(--gray);
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 0;
+      max-width: 1100px;
+    }
+
+    .stat-block {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+
+    .stat-block:last-child { border-right: none; }
+
+    .stat-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 0;
+      background: var(--red);
+      transition: height 0.6s ease;
+    }
+
+    .stat-block.visible::before { height: 100%; }
+
+    .stat-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-number span { color: var(--red); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ─── PROCESS ───────────────────────────────────────────────────── */
+    #process {
+      padding: 7rem 4rem 7rem 8rem;
+      background: var(--black);
+    }
+
+    .process-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      max-width: 1100px;
+      margin-top: 3rem;
+      position: relative;
+    }
+
+    /* Horizontal connector line */
+    .process-row::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      right: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--red) 0%, rgba(232,19,42,0.2) 100%);
+      z-index: 0;
+    }
+
+    .process-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .process-circle::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(232,19,42,0.4);
+    }
+
+    .process-step:hover .process-circle {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(232,19,42,0.5);
+    }
+
+    .process-step-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .process-step-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ─── TESTIMONIALS ──────────────────────────────────────────────── */
+    #testimonials {
+      padding: 7rem 4rem 7rem 8rem;
+      background: var(--gray);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 1100px;
+      margin-top: 3rem;
+    }
+
+    .testimonial-card {
+      background: var(--gray2);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 3rem 2.8rem 2.5rem;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(232,19,42,0.35);
+      transform: translateY(-4px);
+    }
+
+    .quote-mark {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 6rem;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 0.6;
+      margin-bottom: 1.5rem;
+      display: block;
+      opacity: 0.8;
+    }
+
+    .testimonial-text {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .author-info {}
+
+    .author-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+    }
+
+    .author-car {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    .stars {
+      position: absolute;
+      top: 2.5rem;
+      right: 2.5rem;
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars span {
+      color: var(--red);
+      font-size: 1rem;
+    }
+
+    /* ─── CONTACT / BOOKING ─────────────────────────────────────────── */
+    #contact {
+      padding: 7rem 4rem 7rem 8rem;
+      background: var(--black);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      max-width: 1100px;
+      align-items: start;
+    }
+
+    .contact-info {}
+
+    .contact-tagline {
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-tagline em { font-style: normal; color: var(--red); }
+
+    .contact-detail {
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .contact-detail-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(232,19,42,0.15);
+      border: 1px solid rgba(232,19,42,0.3);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon svg { width: 14px; height: 14px; fill: var(--red); }
+
+    /* Form */
+    .booking-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .form-group input,
+    .form-group select {
+      background: var(--gray);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--white);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.25s;
+      -webkit-appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--red);
+    }
+
+    .form-group select option { background: var(--gray2); }
+
+    .form-group input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .btn-submit {
+      margin-top: 0.5rem;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 1.1rem 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit:hover { background: var(--red-dim); transform: translateY(-2px); }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s, opacity 0.5s;
+    }
+
+    .btn-submit:active::after {
+      width: 300px; height: 300px; opacity: 0;
+    }
+
+    /* Success message */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      border: 1px solid rgba(232,19,42,0.35);
+      background: rgba(232,19,42,0.07);
+    }
+
+    .form-success.show { display: block; }
+
+    .form-success h3 {
+      font-size: 2rem;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-success p { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* ─── FOOTER ────────────────────────────────────────────────────── */
+    #footer {
+      background: var(--gray);
+      padding: 4rem 4rem 2rem 8rem;
+      border-top: 1px solid rgba(232,19,42,0.2);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {}
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-logo span { color: var(--red); }
+
+    .footer-tagline {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      max-width: 220px;
+      line-height: 1.6;
+    }
+
+    .footer-nav-group {}
+
+    .footer-nav-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .footer-nav-links a {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+
+    .footer-nav-links a:hover { color: var(--red); }
+
+    .footer-social {}
+
+    .social-links {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 0.4rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--red);
+      background: rgba(232,19,42,0.1);
+    }
+
+    .social-icon svg { width: 16px; height: 16px; fill: var(--white); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom a { color: var(--red); transition: opacity 0.2s; }
+    .footer-bottom a:hover { opacity: 0.8; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      #hero, #services, #stats, #process, #testimonials, #contact, #footer {
+        padding-left: 4rem;
+      }
+      .scroll-cue { left: 4rem; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    @media (max-width: 768px) {
+      #nav { padding: 0 1.5rem; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      #hero, #services, #stats, #process, #testimonials, #contact, #footer {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      #hero { padding-top: 100px; }
+
+      .hero-headline { font-size: clamp(3.2rem, 13vw, 5rem); }
+
+      @keyframes expandLine {
+        to { width: 240px; }
+      }
+
+      .services-grid { grid-template-columns: 1fr; }
+      .stats-row { flex-direction: column; }
+      .stat-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+      .process-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+      }
+
+      .process-row::before {
+        top: 28px;
+        left: 27px;
+        right: auto;
+        width: 1px;
+        height: calc(100% - 56px);
+        background: linear-gradient(180deg, var(--red) 0%, rgba(232,19,42,0.2) 100%);
+      }
+
+      .process-step {
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 0;
+      }
+
+      .process-circle { margin-bottom: 0; flex-shrink: 0; }
+
+      .testimonials-grid { grid-template-columns: 1fr; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-top { flex-direction: column; }
+
+      .scroll-cue { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-btns { flex-direction: column; }
+      .btn-red, .btn-outline { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────────────────── -->
+<nav id="nav" aria-label="Main navigation">
+  <div class="nav-logo">Apex<span>.</span>Detail</div>
+
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#stats">Why Us</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+
+  <a href="#contact" class="nav-cta">Book Now</a>
+
+  <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu" role="navigation">
+  <a href="#services"     onclick="closeMobile()">Services</a>
+  <a href="#stats"        onclick="closeMobile()">Why Us</a>
+  <a href="#process"      onclick="closeMobile()">Process</a>
+  <a href="#testimonials" onclick="closeMobile()">Reviews</a>
+  <a href="#contact"      onclick="closeMobile()" style="color:var(--red)">Book Now</a>
+</div>
+
+<!-- ─── HERO ──────────────────────────────────────────────────────────── -->
+<section id="hero" aria-label="Hero">
+  <div class="hero-content">
+    <div class="hero-badge fade-up">Premium Automotive Detailing</div>
+
+    <h1 class="hero-headline fade-up delay-1">
+      Your Car.<br><em>Perfected.</em>
+    </h1>
+
+    <span class="red-underline"></span>
+
+    <p class="hero-sub fade-up delay-2">
+      <strong>Professional-grade detailing</strong> that goes beyond the surface.<br>
+      From a showroom finish to ceramic-level protection — we do it right.
+    </p>
+
+    <div class="hero-btns fade-up delay-3">
+      <a href="#contact" class="btn-red" id="hero-book-btn">Book a Detail</a>
+      <a href="#services" class="btn-outline" id="hero-work-btn">See Our Work</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span class="scroll-cue-line"></span>
+    Scroll
+  </div>
+</section>
+
+<span class="red-divider"></span>
+
+<!-- ─── SERVICES ──────────────────────────────────────────────────────── -->
+<section id="services" aria-label="Services">
+  <div class="section-label fade-up">What We Do</div>
+  <h2 class="section-title fade-up delay-1">Our Services</h2>
+
+  <div class="services-grid">
+
+    <div class="service-card fade-up delay-1">
+      <div class="service-num">01</div>
+      <div class="service-name">Exterior Wash &amp; Wax</div>
+      <p class="service-desc">Full hand wash, clay bar treatment, and carnauba wax application. Leaves your paint slick, deep, and protected against the elements.</p>
+      <span class="service-price">From $89</span>
+    </div>
+
+    <div class="service-card fade-up delay-2">
+      <div class="service-num">02</div>
+      <div class="service-name">Interior Deep Clean</div>
+      <p class="service-desc">Steam-clean upholstery, vacuum all surfaces, condition leather, and deodorise. Your cabin returns to factory-fresh condition.</p>
+      <span class="service-price">From $120</span>
+    </div>
+
+    <div class="service-card fade-up delay-3">
+      <div class="service-num">03</div>
+      <div class="service-name">Paint Correction</div>
+      <p class="service-desc">Multi-stage machine polishing to eliminate swirl marks, light scratches, and oxidation. Restores true depth and gloss to any finish.</p>
+      <span class="service-price">From $299</span>
+    </div>
+
+    <div class="service-card fade-up delay-4">
+      <div class="service-num">04</div>
+      <div class="service-name">Ceramic Coating</div>
+      <p class="service-desc">Nano-ceramic formula bonds to your paint for years of hydrophobic, UV-resistant protection. The last coating your car will ever need.</p>
+      <span class="service-price">From $699</span>
+    </div>
+
+  </div>
+</section>
+
+<span class="red-divider"></span>
+
+<!-- ─── STATS ─────────────────────────────────────────────────────────── -->
+<section id="stats" aria-label="Why choose us">
+  <div class="stats-row">
+
+    <div class="stat-block fade-up delay-1">
+      <div class="stat-number">500<span>+</span></div>
+      <div class="stat-label">Cars Detailed</div>
+    </div>
+
+    <div class="stat-block fade-up delay-2">
+      <div class="stat-number">100<span>%</span></div>
+      <div class="stat-label">Satisfaction Guaranteed</div>
+    </div>
+
+    <div class="stat-block fade-up delay-3">
+      <div class="stat-number">5<span>★</span></div>
+      <div class="stat-label">Star Rated</div>
+    </div>
+
+  </div>
+</section>
+
+<span class="red-divider"></span>
+
+<!-- ─── PROCESS ────────────────────────────────────────────────────────── -->
+<section id="process" aria-label="Our process">
+  <div class="section-label fade-up">How It Works</div>
+  <h2 class="section-title fade-up delay-1">The Process</h2>
+
+  <div class="process-row">
+
+    <div class="process-step fade-up delay-1">
+      <div class="process-circle">01</div>
+      <div>
+        <div class="process-step-name">Book Online</div>
+        <p class="process-step-desc">Pick your service, choose a time slot, and confirm your booking in under 2 minutes.</p>
+      </div>
+    </div>
+
+    <div class="process-step fade-up delay-2">
+      <div class="process-circle">02</div>
+      <div>
+        <div class="process-step-name">Drop Off</div>
+        <p class="process-step-desc">Bring your vehicle to our facility. We'll do a full walk-around inspection together.</p>
+      </div>
+    </div>
+
+    <div class="process-step fade-up delay-3">
+      <div class="process-circle">03</div>
+      <div>
+        <div class="process-step-name">We Detail</div>
+        <p class="process-step-desc">Our technicians get to work with professional-grade products and techniques.</p>
+      </div>
+    </div>
+
+    <div class="process-step fade-up delay-4">
+      <div class="process-circle">04</div>
+      <div>
+        <div class="process-step-name">Pick Up Gleaming</div>
+        <p class="process-step-desc">Collect your car looking better than it has in years. We guarantee it.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<span class="red-divider"></span>
+
+<!-- ─── TESTIMONIALS ───────────────────────────────────────────────────── -->
+<section id="testimonials" aria-label="Customer reviews">
+  <div class="section-label fade-up">What They Say</div>
+  <h2 class="section-title fade-up delay-1">Real Clients.<br>Real Results.</h2>
+
+  <div class="testimonials-grid">
+
+    <div class="testimonial-card fade-up delay-1">
+      <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">Apex brought my blacked-out BMW M3 back to life. The paint correction was unreal — zero swirl marks, mirror-like finish. I've been to six other detailers over the years. None of them come close.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">JK</div>
+        <div class="author-info">
+          <div class="author-name">Jordan K.</div>
+          <div class="author-car">BMW M3 Competition</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card fade-up delay-2">
+      <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">Got the ceramic coating done on my Porsche 911 and honestly it looks better than the day I picked it up from the dealer. The team is meticulous, professional, and worth every penny.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SR</div>
+        <div class="author-info">
+          <div class="author-name">Sofia R.</div>
+          <div class="author-car">Porsche 911 Carrera S</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<span class="red-divider"></span>
+
+<!-- ─── CONTACT ────────────────────────────────────────────────────────── -->
+<section id="contact" aria-label="Book a detail">
+  <div class="contact-inner">
+
+    <div class="contact-info fade-up">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="contact-tagline">Ready to<br>Book Your<br><em>Detail?</em></h2>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        48 Industrial Ave, Unit 3, Detroit, MI
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        hello@apexdetailco.com
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        (313) 555-0182
+      </div>
+
+      <div class="contact-detail" style="margin-top:0.4rem">
+        <div class="contact-detail-icon">
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+        </div>
+        Mon–Sat 8am–6pm, Sun Closed
+      </div>
+    </div>
+
+    <div class="fade-up delay-2">
+      <form class="booking-form" id="bookingForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Full Name</label>
+            <input type="text" id="fname" name="name" placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label for="fphone">Phone Number</label>
+            <input type="tel" id="fphone" name="phone" placeholder="(313) 555-0100" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fservice">Select Service</label>
+          <select id="fservice" name="service" required>
+            <option value="" disabled selected>Choose a service…</option>
+            <option value="exterior">Exterior Wash &amp; Wax — From $89</option>
+            <option value="interior">Interior Deep Clean — From $120</option>
+            <option value="paint">Paint Correction — From $299</option>
+            <option value="ceramic">Ceramic Coating — From $699</option>
+            <option value="full">Full Detail Package — From $349</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fdate">Preferred Date</label>
+            <input type="date" id="fdate" name="date" required />
+          </div>
+          <div class="form-group">
+            <label for="fvehicle">Vehicle (optional)</label>
+            <input type="text" id="fvehicle" name="vehicle" placeholder="e.g. BMW M3 2022" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Booking →</button>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <h3>Booking Received!</h3>
+        <p>We'll call you within 24 hours to confirm your appointment. Thanks for choosing Apex Detail Co.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────────────── -->
+<footer id="footer" aria-label="Footer">
+  <div class="footer-top">
+
+    <div class="footer-brand">
+      <div class="footer-logo">Apex<span>.</span>Detail Co.</div>
+      <p class="footer-tagline">Premium automotive detailing for those who demand perfection.</p>
+    </div>
+
+    <div class="footer-nav-group">
+      <div class="footer-nav-title">Services</div>
+      <ul class="footer-nav-links">
+        <li><a href="#services">Exterior Wash &amp; Wax</a></li>
+        <li><a href="#services">Interior Deep Clean</a></li>
+        <li><a href="#services">Paint Correction</a></li>
+        <li><a href="#services">Ceramic Coating</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-nav-group">
+      <div class="footer-nav-title">Company</div>
+      <ul class="footer-nav-links">
+        <li><a href="#stats">Why Choose Us</a></li>
+        <li><a href="#process">Our Process</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-social">
+      <div class="footer-nav-title">Follow Us</div>
+      <div class="social-links">
+        <!-- Instagram -->
+        <a href="#" class="social-icon" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" class="social-icon" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        </a>
+        <!-- TikTok -->
+        <a href="#" class="social-icon" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.23 8.23 0 004.83 1.55V6.79a4.85 4.85 0 01-1.06-.1z"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 Apex Detail Co. All rights reserved.</span>
+    <span>Built for perfectionists. &nbsp;|&nbsp; <a href="#contact">Book a Detail</a></span>
+  </div>
+</footer>
+
+<!-- ─── JAVASCRIPT ─────────────────────────────────────────────────────── -->
+<script>
+  /* ── Nav scroll ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── Hamburger ── */
+  const hamburger    = document.getElementById('hamburger');
+  const mobileMenu   = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+
+  hamburger.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') hamburger.click();
+  });
+
+  function closeMobile() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── IntersectionObserver fade-in-up ── */
+  const fadeEls = document.querySelectorAll('.fade-up');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  fadeEls.forEach(el => observer.observe(el));
+
+  /* ── Stat red bars ── */
+  const statBlocks = document.querySelectorAll('.stat-block');
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  statBlocks.forEach(el => statObserver.observe(el));
+
+  /* ── Form submit ── */
+  const form = document.getElementById('bookingForm');
+  const successMsg = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name    = document.getElementById('fname').value.trim();
+    const phone   = document.getElementById('fphone').value.trim();
+    const service = document.getElementById('fservice').value;
+    const date    = document.getElementById('fdate').value;
+
+    if (!name || !phone || !service || !date) {
+      // Shake invalid fields
+      [fname, fphone, fservice, fdate].forEach(id => {
+        const el = document.getElementById(id) || document.getElementById(id.replace('f','f'));
+        if (el && !el.value.trim()) {
+          el.style.borderColor = 'var(--red)';
+          el.style.animation = 'none';
+          setTimeout(() => el.style.animation = '', 10);
+        }
+      });
+      return;
+    }
+
+    form.style.display = 'none';
+    successMsg.classList.add('show');
+  });
+
+  /* ── Date input min ── */
+  const dateInput = document.getElementById('fdate');
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm   = String(today.getMonth() + 1).padStart(2, '0');
+  const dd   = String(today.getDate()).padStart(2, '0');
+  dateInput.min = `${yyyy}-${mm}-${dd}`;
+</script>
+
+</body>
+</html>
